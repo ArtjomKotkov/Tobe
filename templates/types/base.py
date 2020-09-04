@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import json
 
 
-class BaseType(ABC):
+class ResponseBaseType(ABC):
 
     @abstractmethod
     def __init__(self):
