@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 import json
 
+from ..services import fix_built_ins
+
 
 class BaseType(ABC):
 
@@ -8,6 +10,15 @@ class BaseType(ABC):
 
     def serialize(self):
         return json.dumps(self.__dict__)
+
+    @classmethod
+    def parse(cls, response):
+        """Parse data from response, fix built in names
+
+            Returns:
+                Type instance.
+        """
+        return cls(**fix_built_ins(response)) if response else None
 
 
 class Error(BaseType):

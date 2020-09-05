@@ -1,1 +1,2 @@
-from .base import BaseMethod, getMe, sendMessage
+from .base import BaseMethod
+from .methods import getMe, sendMessage
