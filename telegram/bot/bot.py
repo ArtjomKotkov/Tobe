@@ -1,11 +1,24 @@
 from collections.abc import Iterable
 
-from .model import BaseBot
-from ..methods import BaseMethod
+from ..methods import BaseMethod, getMe
 
 
-class Bot(BaseBot):
+class Bot:
     """Main bot class."""
+
+    def __init__(self, token=None):
+        self.token = token
+
+    def set_token(self, token:str):
+        self.token = token
+
+    def get_token(self):
+        return self.token
+
+    def sync(self):
+        for key, value in self.execute(getMe()).__dict__.items():
+            setattr(self, key, value)
+        return self
 
     def execute(self, cmd, forced=False):
         """Execution command(s).
@@ -18,21 +31,24 @@ class Bot(BaseBot):
                 If forced=True, skip failed executions if commands were acquired as list of methods.
                 If forced=false, if get failed execution, stop send next commands.
         """
+
+        result = None # Result of execution, iterable or type instance.
+
         assert isinstance(cmd, Iterable) or isinstance(
             cmd, BaseMethod), 'cmd must be instance of BaseMethod or iter of BaseMethod.'
 
         if isinstance(cmd, Iterable):
-            status = True
+            result = []
             for num, method in enumerate(cmd):
                     if forced:
-                        method.get_token(self.get_token()).execute()
-                    elif status == True:
-                        status = method.get_token(self.get_token()).execute()
+                        response = method.set_token(self.get_token()).execute()
+                        result.append(response)
                     else:
-                        return exe
-
-
-
-
-
+                        response = method.set_token(self.get_token()).execute()
+                        result.append(response)
+                        if response.status == False:
+                            break
+        else:
+            result = cmd.set_token(self.get_token()).execute()
+        return result
 

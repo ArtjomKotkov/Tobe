@@ -1,12 +1,24 @@
 from abc import ABC, abstractmethod
 import json
+from urllib.parse import urlencode
+
+import httplib2
+
+from ..types import BaseType, User, Error, Message
 
 
 class BaseMethod(ABC):
+    request_url = 'https://api.telegram.org/bot'
+
+    http_method = 'GET'
+    response_type = BaseType
+
+    content_type = 'application/json'
+    success_http_statuses = [200]
 
     @abstractmethod
     def __init__(self):
-        pass
+        self.method_name = self.__class__.__name__
 
     def set_token(self, token):
         self.token = token
@@ -15,11 +27,58 @@ class BaseMethod(ABC):
     def serialize(self):
         return json.dumps(self.__dict__)
 
+    def get_method_url(self):
+        return self.request_url + self.token + '/' + self.method_name
+
+    def get_method_body(self):
+        data = dict(self.__dict__)
+        data.pop('token')
+        blank_keys = []
+        for key, value in data.items():
+            if not value:
+                blank_keys.append(key)
+        for key in blank_keys:
+            data.pop(key)
+
+        if self.http_method == 'GET':
+            return json.dumps(data)
+        else:
+            return urlencode(data)
+
     def execute(self):
-        assert self.token, 'Bot token must be provided for method execution.'
-        print(f'{self.__name__} is executed.')
-        status = True
-        return status
+        assert hasattr(self, 'token'), 'Bot token must be provided for method execution.'
+
+        headers = {
+            'content-type': self.content_type
+        }
+
+        http = httplib2.Http()
+        resp, content = http.request(self.get_method_url(), method=self.http_method, body=self.get_method_body(),
+                                     headers=headers)
+        if int(resp['status']) not in self.success_http_statuses:
+            return self.parse_response(content, Error)
+        return self.parse_response(content)
+
+    def parse_response(self, response, response_type=None):
+        response = json.loads(response)
+        return self.response_type(**BaseMethod.fix_built_ins(response['result'])) if not response_type else response_type(**response)
+
+    @staticmethod
+    def fix_built_ins(response):
+        built_ins = ['from', 'type']
+        for key in built_ins:
+            if key in response:
+                response[f'_{key}'] = response.pop(key)
+        return response
+
+
+
+class getMe(BaseMethod):
+
+    response_type = User
+
+    def __init__(self):
+        super().__init__()
 
 
 class sendMessage(BaseMethod):
@@ -42,6 +101,8 @@ class sendMessage(BaseMethod):
     reply_markup : InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply, optional
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
+
+    response_type = Message
 
     def __init__(self, chat_id,
                  text,
@@ -75,6 +136,8 @@ class forwardMessage(BaseMethod):
          Message identifier in the chat specified in from_chat_id
     """
 
+    response_type = Message
+
     def __init__(self, chat_id,
                  from_chat_id,
                  message_id,
@@ -106,6 +169,8 @@ class sendPhoto(BaseMethod):
     reply_markup : InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply, optional
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
+
+    response_type = Message
 
     def __init__(self, chat_id,
                  photo,
@@ -152,6 +217,8 @@ class sendAudio(BaseMethod):
     reply_markup : InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply, optional
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
+
+    response_type = Message
 
     def __init__(self, chat_id,
                  audio,
@@ -200,6 +267,8 @@ class sendDocument(BaseMethod):
     reply_markup : InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply, optional
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
+
+    response_type = Message
 
     def __init__(self, chat_id,
                  document,
@@ -1209,6 +1278,3 @@ class setMyCommands(BaseMethod):
     def __init__(self, commands):
         super().__init__()
         self.commands = commands
-
-
-
