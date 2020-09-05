@@ -20,6 +20,7 @@ class Error(BaseType):
         self.error_code = error_code
         self.description = description
 
+
 class User(BaseType):
     """This object represents a Telegram user or bot.
 
