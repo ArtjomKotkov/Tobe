@@ -1,4 +1,5 @@
-from ..types import BaseType, PhotoSize
+from ..types import BaseType
+from ..base.types import PhotoSize
 
 
 class Sticker(BaseType):

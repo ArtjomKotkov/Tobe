@@ -1,4 +1,5 @@
-from ..types import BaseType, User
+from ..types import BaseType
+from ..base.types import User
 
 
 class LabeledPrice(BaseType):

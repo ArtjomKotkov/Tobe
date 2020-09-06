@@ -1,41 +1,4 @@
-from abc import ABC
-import json
-
-
-from ..services import fix_built_ins
-
-
-
-class BaseType(ABC):
-
-    status = True
-
-    def serialize(self):
-        return json.dumps(self.__dict__)
-
-    @classmethod
-    def parse(cls, response, iterable=False):
-        """Parse data from response, fix built in names
-
-            Returns:
-                Type instance.
-        """
-        if iterable:
-            return [cls(**fix_built_ins(part)) for part in response] if response else None
-        else:
-            return cls(**fix_built_ins(response)) if response else None
-
-
-class Error(BaseType):
-    """Error type class."""
-
-    status = False
-
-    def __init__(self, ok, error_code, description):
-        self.status = ok
-        self.error_code = error_code
-        self.description = description
-
+from ..types import BaseType
 
 
 class User(BaseType):
@@ -359,7 +322,7 @@ class MessageEntity(BaseType):
     Parameters
     ----------
     _type : String
-         Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames)
+         Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@tobe.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames)
     offset : Integer
          Offset in UTF-16 code units to the start of the entity
     length : Integer

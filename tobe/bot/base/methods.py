@@ -1,5 +1,5 @@
-from .base import BaseMethod
-from ..types import User, Message, InlineKeyboardMarkup
+from ..methods import BaseMethod
+from .types import User, Message, InlineKeyboardMarkup
 
 
 class getMe(BaseMethod):

@@ -1,6 +1,6 @@
 from io import IOBase
 
-from ..methods import BaseMethod
+from tobe.bot.methods import BaseMethod
 from .types import Update, WebhookInfo
 
 

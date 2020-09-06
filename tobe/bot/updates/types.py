@@ -1,4 +1,5 @@
-from ..types import BaseType, Message, Poll, PollAnswer, CallbackQuery
+from ..types import BaseType
+from ..base.types import Message, Poll, PollAnswer, CallbackQuery
 from ..inline.types import InlineQuery, ChosenInlineResult
 
 

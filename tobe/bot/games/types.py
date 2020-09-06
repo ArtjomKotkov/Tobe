@@ -1,4 +1,5 @@
-from ..types import BaseType, PhotoSize, MessageEntity, Animation, User
+from ..types import BaseType
+from ..base.types import PhotoSize, MessageEntity, Animation, User
 
 
 class Game(BaseType):

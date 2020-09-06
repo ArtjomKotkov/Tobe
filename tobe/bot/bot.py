@@ -1,7 +1,8 @@
 from collections.abc import Iterable
 
-from ..methods import BaseMethod, getMe
-from ..decorators import propagate_value
+from .methods import BaseMethod
+from .base.methods import getMe
+from .decorators import propagate_value
 
 
 class Bot:
