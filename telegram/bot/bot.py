@@ -1,13 +1,29 @@
 from collections.abc import Iterable
 
-from .model import BaseBot
-from ..methods import BaseMethod
+from ..methods import BaseMethod, getMe
+from ..decorators import propagate_value
 
 
-class Bot(BaseBot):
+class Bot:
     """Main bot class."""
 
-    def execute(self, cmd, forced=False):
+    def __init__(self, token=None):
+        self.token = token
+        self.propagated_values = {}
+
+    def set_token(self, token:str):
+        self.token = token
+
+    def get_token(self):
+        return self.token
+
+    def sync(self):
+        for key, value in self.execute(getMe()).__dict__.items():
+            setattr(self, key, value)
+        return self
+
+    @propagate_value(update_id='offset')
+    def execute(self, cmd, forced=False, propogate=False, propagate_fields=None):
         """Execution command(s).
 
         Parameters
@@ -17,22 +33,40 @@ class Bot(BaseBot):
             forced: bool
                 If forced=True, skip failed executions if commands were acquired as list of methods.
                 If forced=false, if get failed execution, stop send next commands.
+            progate_fields: dict
+                Fields which need to propogate into the bot (for saving it for next request).
+                User key=value syntax, where key - field from method, value - field to bot.
+                Supports inherit strictures, like - 'message.chat.id'.
         """
+
+        result = None # Result of execution, iterable or type instance.
+
         assert isinstance(cmd, Iterable) or isinstance(
             cmd, BaseMethod), 'cmd must be instance of BaseMethod or iter of BaseMethod.'
 
         if isinstance(cmd, Iterable):
-            status = True
+            result = []
             for num, method in enumerate(cmd):
+                    # If global propogate is enabled.
+                    method.set_token(self.get_token())
+                    if propogate:
+                        method = method.propagate_from_bot(self)
+                    elif method.propagate_values:
+                        method = method.propagate_from_bot(self)
                     if forced:
-                        method.get_token(self.get_token()).execute()
-                    elif status == True:
-                        status = method.get_token(self.get_token()).execute()
+                        response = method.execute()
+                        result.append((response, method.propagate_fields))
                     else:
-                        return exe
-
-
-
-
-
+                        response = method.execute()
+                        result.append((response, method.propagate_fields))
+                        if response.status == False:
+                            break
+        else:
+            cmd.set_token(self.get_token())
+            if propogate:
+                cmd = cmd.propagate_from_bot(self)
+            elif cmd.propagate_values:
+                cmd = cmd.propagate_from_bot(self)
+            result = (cmd.execute(), cmd.propagate_fields)
+        return result[0] if isinstance(result, Iterable) and len(result) == 1 else result
 

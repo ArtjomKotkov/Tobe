@@ -1,15 +1,39 @@
 from abc import ABC, abstractmethod
 import json
+from collections.abc import Iterable
+
+from ..services import fix_built_ins
 
 
 class BaseType(ABC):
 
-    @abstractmethod
-    def __init__(self):
-        pass
+    status = True
 
     def serialize(self):
         return json.dumps(self.__dict__)
+
+    @classmethod
+    def parse(cls, response, iterable=False):
+        """Parse data from response, fix built in names
+
+            Returns:
+                Type instance.
+        """
+        if iterable:
+            return [cls(**fix_built_ins(part)) for part in response] if response else None
+        else:
+            return cls(**fix_built_ins(response)) if response else None
+
+
+class Error(BaseType):
+    """Error type class."""
+
+    status = False
+
+    def __init__(self, ok, error_code, description):
+        self.status = ok
+        self.error_code = error_code
+        self.description = description
 
 
 class User(BaseType):
@@ -46,7 +70,6 @@ class User(BaseType):
                  can_join_groups=None,
                  can_read_all_group_messages=None,
                  supports_inline_queries=None):
-        super().__init__()
         self.id = id
         self.is_bot = is_bot
         self.first_name = first_name
@@ -107,18 +130,17 @@ class Chat(BaseType):
                  slow_mode_delay=None,
                  sticker_set_name=None,
                  can_set_sticker_set=None):
-        super().__init__()
         self.id = id
         self._type = _type
         self.title = title
         self.username = username
         self.first_name = first_name
         self.last_name = last_name
-        self.photo = photo
+        self.photo = ChatPhoto.parse(photo)
         self.description = description
         self.invite_link = invite_link
-        self.pinned_message = pinned_message
-        self.permissions = permissions
+        self.pinned_message = Message.parse(pinned_message)
+        self.permissions = ChatPermissions.parse(permissions)
         self.slow_mode_delay = slow_mode_delay
         self.sticker_set_name = sticker_set_name
         self.can_set_sticker_set = can_set_sticker_set
@@ -278,56 +300,55 @@ class Message(BaseType):
                  connected_website=None,
                  passport_data=None,
                  reply_markup=None):
-        super().__init__()
         self.message_id = message_id
-        self._from = _from
+        self._from = User.parse(_from)
         self.date = date
-        self.chat = chat
-        self.forward_from = forward_from
-        self.forward_from_chat = forward_from_chat
+        self.chat = Chat.parse(chat)
+        self.forward_from = User.parse(forward_from)
+        self.forward_from_chat = Chat.parse(forward_from_chat)
         self.forward_from_message_id = forward_from_message_id
         self.forward_signature = forward_signature
         self.forward_sender_name = forward_sender_name
         self.forward_date = forward_date
-        self.reply_to_message = reply_to_message
-        self.via_bot = via_bot
+        self.reply_to_message = Message.parse(reply_to_message)
+        self.via_bot = User.parse(via_bot)
         self.edit_date = edit_date
         self.media_group_id = media_group_id
         self.author_signature = author_signature
         self.text = text
-        self.entities = entities
-        self.animation = animation
-        self.audio = audio
-        self.document = document
-        self.photo = photo
-        self.sticker = sticker
-        self.video = video
-        self.video_note = video_note
+        self.entities = MessageEntity.parse(entities, iterable=True)
+        self.animation = Animation.parse(animation)
+        self.audio = Audio.parse(audio)
+        self.document = Document.parse(document)
+        self.photo = PhotoSize.parse(photo, iterable=True)
+        self.sticker = sticker # <-Sticker
+        self.video = Video.parse(video)
+        self.video_note = MessageEntity.parse(video_note, iterable=True)
         self.voice = voice
         self.caption = caption
         self.caption_entities = caption_entities
-        self.contact = contact
-        self.dice = dice
-        self.game = game
-        self.poll = poll
-        self.venue = venue
-        self.location = location
-        self.new_chat_members = new_chat_members
-        self.left_chat_member = left_chat_member
+        self.contact = Contact.parse(contact)
+        self.dice = Dice.parse(dice)
+        self.game = game # <-Game
+        self.poll = Poll.parse(poll)
+        self.venue = Venue.parse(venue)
+        self.location = Location.parse(location)
+        self.new_chat_members = User.parse(new_chat_members, iterable=True)
+        self.left_chat_member = User.parse(left_chat_member)
         self.new_chat_title = new_chat_title
-        self.new_chat_photo = new_chat_photo
+        self.new_chat_photo = PhotoSize.parse(new_chat_photo, iterable=True)
         self.delete_chat_photo = delete_chat_photo
         self.group_chat_created = group_chat_created
         self.supergroup_chat_created = supergroup_chat_created
         self.channel_chat_created = channel_chat_created
         self.migrate_to_chat_id = migrate_to_chat_id
         self.migrate_from_chat_id = migrate_from_chat_id
-        self.pinned_message = pinned_message
-        self.invoice = invoice
-        self.successful_payment = successful_payment
+        self.pinned_message = Message.parse(pinned_message)
+        self.invoice = invoice # <- Invoice
+        self.successful_payment = successful_payment # <- successful_payment
         self.connected_website = connected_website
-        self.passport_data = passport_data
-        self.reply_markup = reply_markup
+        self.passport_data = passport_data # <- passport_data
+        self.reply_markup = InlineKeyboardMarkup.parse(reply_markup)
 
 
 class MessageEntity(BaseType):
@@ -355,12 +376,11 @@ class MessageEntity(BaseType):
                  url=None,
                  user=None,
                  language=None):
-        super().__init__()
         self.type = _type
         self.offset = offset
         self.length = length
         self.url = url
-        self.user = user
+        self.user = User.parse(user)
         self.language = language
 
 
@@ -386,7 +406,6 @@ class PhotoSize(BaseType):
                  width,
                  height,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.width = width
@@ -428,13 +447,12 @@ class Animation(BaseType):
                  file_name=None,
                  mime_type=None,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.width = width
         self.height = height
         self.duration = duration
-        self.thumb = thumb
+        self.thumb = PhotoSize.parse(thumb)
         self.file_name = file_name
         self.mime_type = mime_type
         self.file_size = file_size
@@ -471,7 +489,6 @@ class Audio(BaseType):
                  mime_type=None,
                  file_size=None,
                  thumb=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.duration = duration
@@ -479,7 +496,7 @@ class Audio(BaseType):
         self.title = title
         self.mime_type = mime_type
         self.file_size = file_size
-        self.thumb = thumb
+        self.thumb = PhotoSize.parse(thumb)
 
 
 class Document(BaseType):
@@ -507,10 +524,9 @@ class Document(BaseType):
                  file_name=None,
                  mime_type=None,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
-        self.thumb = thumb
+        self.thumb = PhotoSize.parse(thumb)
         self.file_name = file_name
         self.mime_type = mime_type
         self.file_size = file_size
@@ -547,13 +563,12 @@ class Video(BaseType):
                  thumb=None,
                  mime_type=None,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.width = width
         self.height = height
         self.duration = duration
-        self.thumb = thumb
+        self.thumb = PhotoSize.parse(thumb)
         self.mime_type = mime_type
         self.file_size = file_size
 
@@ -583,12 +598,11 @@ class VideoNote(BaseType):
                  duration,
                  thumb=None,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.length = length
         self.duration = duration
-        self.thumb = thumb
+        self.thumb = PhotoSize.parse(thumb)
         self.file_size = file_size
 
 
@@ -614,7 +628,6 @@ class Voice(BaseType):
                  duration,
                  mime_type=None,
                  file_size=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.duration = duration
@@ -644,7 +657,6 @@ class Contact(BaseType):
                  last_name=None,
                  user_id=None,
                  vcard=None):
-        super().__init__()
         self.phone_number = phone_number
         self.first_name = first_name
         self.last_name = last_name
@@ -665,7 +677,6 @@ class Dice(BaseType):
 
     def __init__(self, emoji,
                  value):
-        super().__init__()
         self.emoji = emoji
         self.value = value
 
@@ -683,7 +694,6 @@ class PollOption(BaseType):
 
     def __init__(self, text,
                  voter_count):
-        super().__init__()
         self.text = text
         self.voter_count = voter_count
 
@@ -704,9 +714,8 @@ class PollAnswer(BaseType):
     def __init__(self, poll_id,
                  user,
                  option_ids):
-        super().__init__()
         self.poll_id = poll_id
-        self.user = user
+        self.user = User.parse(user)
         self.option_ids = option_ids
 
 
@@ -756,10 +765,9 @@ class Poll(BaseType):
                  explanation_entities=None,
                  open_period=None,
                  close_date=None):
-        super().__init__()
         self.id = id
         self.question = question
-        self.options = options
+        self.options = PollOption.parse(options, iterable=True)
         self.total_voter_count = total_voter_count
         self.is_closed = is_closed
         self.is_anonymous = is_anonymous
@@ -767,7 +775,7 @@ class Poll(BaseType):
         self.allows_multiple_answers = allows_multiple_answers
         self.correct_option_id = correct_option_id
         self.explanation = explanation
-        self.explanation_entities = explanation_entities
+        self.explanation_entities = MessageEntity.parse(explanation_entities, iterable=True)
         self.open_period = open_period
         self.close_date = close_date
 
@@ -785,7 +793,6 @@ class Location(BaseType):
 
     def __init__(self, longitude,
                  latitude):
-        super().__init__()
         self.longitude = longitude
         self.latitude = latitude
 
@@ -812,8 +819,7 @@ class Venue(BaseType):
                  address,
                  foursquare_id=None,
                  foursquare_type=None):
-        super().__init__()
-        self.location = location
+        self.location = Location.parse(location)
         self.title = title
         self.address = address
         self.foursquare_id = foursquare_id
@@ -833,9 +839,8 @@ class UserProfilePhotos(BaseType):
 
     def __init__(self, total_count,
                  photos):
-        super().__init__()
         self.total_count = total_count
-        self.photos = photos
+        self.photos = PhotoSize.parse(photos)
 
 
 class File(BaseType):
@@ -857,7 +862,6 @@ class File(BaseType):
                  file_unique_id,
                  file_size=None,
                  file_path=None):
-        super().__init__()
         self.file_id = file_id
         self.file_unique_id = file_unique_id
         self.file_size = file_size
@@ -883,8 +887,7 @@ class ReplyKeyboardMarkup(BaseType):
                  resize_keyboard=None,
                  one_time_keyboard=None,
                  selective=None):
-        super().__init__()
-        self.keyboard = keyboard
+        self.keyboard = KeyboardButton.parse(keyboard)
         self.resize_keyboard = resize_keyboard
         self.one_time_keyboard = one_time_keyboard
         self.selective = selective
@@ -909,11 +912,10 @@ class KeyboardButton(BaseType):
                  request_contact=None,
                  request_location=None,
                  request_poll=None):
-        super().__init__()
         self.text = text
         self.request_contact = request_contact
         self.request_location = request_location
-        self.request_poll = request_poll
+        self.request_poll = KeyboardButtonPollType.parse(request_poll)
 
 
 class KeyboardButtonPollType(BaseType):
@@ -926,7 +928,6 @@ class KeyboardButtonPollType(BaseType):
     """
 
     def __init__(self, _type=None):
-        super().__init__()
         self.type = _type
 
 
@@ -941,9 +942,8 @@ class ReplyKeyboardRemove(BaseType):
          Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
     """
 
-    def __init__(self, remove_keyboard,
+    def __init__(self, remove_keyboard=True,
                  selective=None):
-        super().__init__()
         self.remove_keyboard = remove_keyboard
         self.selective = selective
 
@@ -958,8 +958,16 @@ class InlineKeyboardMarkup(BaseType):
     """
 
     def __init__(self, inline_keyboard):
-        super().__init__()
-        self.inline_keyboard = inline_keyboard
+        self.inline_keyboard = self.inline_keyboard_parser(inline_keyboard)
+
+    def inline_keyboard_parser(self, value):
+        """Array of button rows, each represented by an Array of InlineKeyboardButton objects."""
+        rows = []
+        for row in value:
+            temp_row = []
+            for keyboard_button in row:
+                temp_row.append(InlineKeyboardButton.parse(keyboard_button))
+        return rows
 
 
 class InlineKeyboardButton(BaseType):
@@ -993,14 +1001,13 @@ class InlineKeyboardButton(BaseType):
                  switch_inline_query_current_chat=None,
                  callback_game=None,
                  pay=None):
-        super().__init__()
         self.text = text
         self.url = url
-        self.login_url = login_url
+        self.login_url = LoginUrl.parse(login_url)
         self.callback_data = callback_data
         self.switch_inline_query = switch_inline_query
         self.switch_inline_query_current_chat = switch_inline_query_current_chat
-        self.callback_game = callback_game
+        self.callback_game = callback_game # <- callback_game
         self.pay = pay
 
 
@@ -1023,7 +1030,6 @@ class LoginUrl(BaseType):
                  forward_text=None,
                  bot_username=None,
                  request_write_access=None):
-        super().__init__()
         self.url = url
         self.forward_text = forward_text
         self.bot_username = bot_username
@@ -1058,10 +1064,9 @@ class CallbackQuery(BaseType):
                  inline_message_id=None,
                  data=None,
                  game_short_name=None):
-        super().__init__()
         self.id = id
-        self._from = _from
-        self.message = message
+        self._from = User.parse(_from)
+        self.message = Message.parse(message)
         self.inline_message_id = inline_message_id
         self.chat_instance = chat_instance
         self.data = data
@@ -1081,7 +1086,6 @@ class ForceReply(BaseType):
 
     def __init__(self, force_reply,
                  selective=None):
-        super().__init__()
         self.force_reply = force_reply
         self.selective = selective
 
@@ -1105,7 +1109,6 @@ class ChatPhoto(BaseType):
                  small_file_unique_id,
                  big_file_id,
                  big_file_unique_id):
-        super().__init__()
         self.small_file_id = small_file_id
         self.small_file_unique_id = small_file_unique_id
         self.big_file_id = big_file_id
@@ -1176,8 +1179,7 @@ class ChatMember(BaseType):
                  can_send_polls=None,
                  can_send_other_messages=None,
                  can_add_web_page_previews=None):
-        super().__init__()
-        self.user = user
+        self.user = User.parse(user)
         self.status = status
         self.custom_title = custom_title
         self.until_date = until_date
@@ -1229,7 +1231,6 @@ class ChatPermissions(BaseType):
                  can_change_info=None,
                  can_invite_users=None,
                  can_pin_messages=None):
-        super().__init__()
         self.can_send_messages = can_send_messages
         self.can_send_media_messages = can_send_media_messages
         self.can_send_polls = can_send_polls
@@ -1253,7 +1254,6 @@ class BotCommand(BaseType):
 
     def __init__(self, command,
                  description):
-        super().__init__()
         self.command = command
         self.description = description
 
@@ -1271,7 +1271,6 @@ class Parameters(BaseType):
 
     def __init__(self, migrate_to_chat_id=None,
                  retry_after=None):
-        super().__init__()
         self.migrate_to_chat_id = migrate_to_chat_id
         self.retry_after = retry_after
 
@@ -1295,8 +1294,7 @@ class InputMediaPhoto(BaseType):
                  media,
                  caption=None,
                  parse_mode=None):
-        super().__init__()
-        self.type = type
+        self.type = type # <- input file or str
         self.media = media
         self.caption = caption
         self.parse_mode = parse_mode
@@ -1336,10 +1334,9 @@ class InputMediaVideo(BaseType):
                  height=None,
                  duration=None,
                  supports_streaming=None):
-        super().__init__()
         self.type = type
         self.media = media
-        self.thumb = thumb
+        self.thumb = thumb # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.width = width
@@ -1379,10 +1376,9 @@ class InputMediaAnimation(BaseType):
                  width=None,
                  height=None,
                  duration=None):
-        super().__init__()
         self.type = type
         self.media = media
-        self.thumb = thumb
+        self.thumb = thumb # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.width = width
@@ -1421,10 +1417,9 @@ class InputMediaAudio(BaseType):
                  duration=None,
                  performer=None,
                  title=None):
-        super().__init__()
         self.type = type
         self.media = media
-        self.thumb = thumb
+        self.thumb = thumb # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.duration = duration
@@ -1454,9 +1449,8 @@ class InputMediaDocument(BaseType):
                  thumb=None,
                  caption=None,
                  parse_mode=None):
-        super().__init__()
         self.type = type
         self.media = media
-        self.thumb = thumb
+        self.thumb = thumb # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
