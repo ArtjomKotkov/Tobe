@@ -1,9 +1,8 @@
 from .base import BaseMethod
-from ..types import User, Message
+from ..types import User, Message, InlineKeyboardMarkup
 
 
 class getMe(BaseMethod):
-
     response_type = User
 
     def __init__(self):
@@ -40,7 +39,7 @@ class sendMessage(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.text = text
@@ -72,7 +71,7 @@ class forwardMessage(BaseMethod):
                  from_chat_id,
                  message_id,
                  disable_notification=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.from_chat_id = from_chat_id
@@ -110,7 +109,7 @@ class sendPhoto(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.photo = photo
@@ -163,7 +162,7 @@ class sendAudio(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.audio = audio
@@ -211,7 +210,7 @@ class sendDocument(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.document = document
@@ -266,7 +265,7 @@ class sendVideo(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.video = video
@@ -322,7 +321,7 @@ class sendAnimation(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.animation = animation
@@ -368,7 +367,7 @@ class sendVoice(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.voice = voice
@@ -411,7 +410,7 @@ class sendVideoNote(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.video_note = video_note
@@ -442,7 +441,7 @@ class sendMediaGroup(BaseMethod):
                  media,
                  disable_notification=None,
                  reply_to_message_id=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.media = media
@@ -478,7 +477,7 @@ class sendLocation(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.latitude = latitude
@@ -515,7 +514,7 @@ class editMessageLiveLocation(BaseMethod):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.message_id = message_id
@@ -544,7 +543,7 @@ class stopMessageLiveLocation(BaseMethod):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.message_id = message_id
@@ -589,7 +588,7 @@ class sendVenue(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.latitude = latitude
@@ -634,7 +633,7 @@ class sendContact(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.phone_number = phone_number
@@ -698,7 +697,7 @@ class sendPoll(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.question = question
@@ -739,7 +738,7 @@ class sendDice(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.emoji = emoji
@@ -761,7 +760,7 @@ class sendChatAction(BaseMethod):
 
     def __init__(self, chat_id,
                  action,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.action = action
@@ -783,7 +782,7 @@ class getUserProfilePhotos(BaseMethod):
     def __init__(self, user_id,
                  offset=None,
                  limit=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.user_id = user_id
         self.offset = offset
@@ -800,7 +799,7 @@ class getFile(BaseMethod):
     """
 
     def __init__(self, file_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.file_id = file_id
 
@@ -821,7 +820,7 @@ class kickChatMember(BaseMethod):
     def __init__(self, chat_id,
                  user_id,
                  until_date=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -841,7 +840,7 @@ class unbanChatMember(BaseMethod):
 
     def __init__(self, chat_id,
                  user_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -866,7 +865,7 @@ class restrictChatMember(BaseMethod):
                  user_id,
                  permissions,
                  until_date=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -911,7 +910,7 @@ class promoteChatMember(BaseMethod):
                  can_restrict_members=None,
                  can_pin_messages=None,
                  can_promote_members=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -923,6 +922,7 @@ class promoteChatMember(BaseMethod):
         self.can_restrict_members = can_restrict_members
         self.can_pin_messages = can_pin_messages
         self.can_promote_members = can_promote_members
+
 
 class setChatAdministratorCustomTitle(BaseMethod):
     """Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.
@@ -940,7 +940,7 @@ class setChatAdministratorCustomTitle(BaseMethod):
     def __init__(self, chat_id,
                  user_id,
                  custom_title,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -960,7 +960,7 @@ class setChatPermissions(BaseMethod):
 
     def __init__(self, chat_id,
                  permissions,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.permissions = permissions
@@ -976,7 +976,7 @@ class exportChatInviteLink(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -994,7 +994,7 @@ class setChatPhoto(BaseMethod):
 
     def __init__(self, chat_id,
                  photo,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.photo = photo
@@ -1010,7 +1010,7 @@ class deleteChatPhoto(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1028,7 +1028,7 @@ class setChatTitle(BaseMethod):
 
     def __init__(self, chat_id,
                  title,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.title = title
@@ -1047,7 +1047,7 @@ class setChatDescription(BaseMethod):
 
     def __init__(self, chat_id,
                  description=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.description = description
@@ -1069,7 +1069,7 @@ class pinChatMessage(BaseMethod):
     def __init__(self, chat_id,
                  message_id,
                  disable_notification=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.message_id = message_id
@@ -1086,7 +1086,7 @@ class unpinChatMessage(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1101,7 +1101,7 @@ class leaveChat(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1116,7 +1116,7 @@ class getChat(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1131,7 +1131,7 @@ class getChatAdministrators(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1146,7 +1146,7 @@ class getChatMembersCount(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1164,7 +1164,7 @@ class getChatMember(BaseMethod):
 
     def __init__(self, chat_id,
                  user_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.user_id = user_id
@@ -1183,7 +1183,7 @@ class setChatStickerSet(BaseMethod):
 
     def __init__(self, chat_id,
                  sticker_set_name,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
         self.sticker_set_name = sticker_set_name
@@ -1199,7 +1199,7 @@ class deleteChatStickerSet(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.chat_id = chat_id
 
@@ -1226,7 +1226,7 @@ class answerCallbackQuery(BaseMethod):
                  show_alert=None,
                  url=None,
                  cache_time=None,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.callback_query_id = callback_query_id
         self.text = text
@@ -1245,6 +1245,194 @@ class setMyCommands(BaseMethod):
     """
 
     def __init__(self, commands,
-                 propagate_values:bool=False):
+                 propagate_values: bool = False):
         super().__init__(propagate_values=propagate_values)
         self.commands = commands
+
+
+class MessageUpdate(BaseMethod):
+
+    def get_method_body(self):
+        if self.message:
+            self.chat_id = self.message.chat.id
+            self.message_id = self.message.message_id
+
+        return super().get_method_body()
+
+
+class editMessageText(MessageUpdate):
+    """Use this method to edit text and game messages. On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+
+    Parameters
+    ----------
+    chat_id : Integer or String, optional
+         Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer, optional
+         Required if inline_message_id is not specified. Identifier of the message to edit
+    inline_message_id : String, optional
+         Required if chat_id and message_id are not specified. Identifier of the inline message
+    text : String
+         New text of the message, 1-4096 characters after entities parsing
+    parse_mode : String, optional
+         Mode for parsing entities in the message text. See formatting options for more details.
+    disable_web_page_preview : Boolean, optional
+         Disables link previews for links in this message
+    reply_markup : InlineKeyboardMarkup, optional
+         A JSON-serialized object for an inline keyboard.
+    """
+
+    def __init__(self, text, chat_id=None,
+                 message_id=None,
+                 inline_message_id=None,
+                 parse_mode=None,
+                 disable_web_page_preview=None,
+                 reply_markup: InlineKeyboardMarkup = None,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.inline_message_id = inline_message_id
+        self.text = text
+        self.parse_mode = parse_mode
+        self.disable_web_page_preview = disable_web_page_preview
+        self.reply_markup = reply_markup
+        self.message = message
+
+
+class editMessageCaption(MessageUpdate):
+    """Use this method to edit captions of messages. On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+
+    Parameters
+    ----------
+    chat_id : Integer or String, optional
+         Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer, optional
+         Required if inline_message_id is not specified. Identifier of the message to edit
+    inline_message_id : String, optional
+         Required if chat_id and message_id are not specified. Identifier of the inline message
+    caption : String, optional
+         New caption of the message, 0-1024 characters after entities parsing
+    parse_mode : String, optional
+         Mode for parsing entities in the message caption. See formatting options for more details.
+    reply_markup : InlineKeyboardMarkup, optional
+         A JSON-serialized object for an inline keyboard.
+    """
+
+    def __init__(self, chat_id=None,
+                 message_id=None,
+                 inline_message_id=None,
+                 caption=None,
+                 parse_mode=None,
+                 reply_markup: InlineKeyboardMarkup = None,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.inline_message_id = inline_message_id
+        self.caption = caption
+        self.parse_mode = parse_mode
+        self.reply_markup = reply_markup
+        self.message = message
+
+
+class editMessageMedia(MessageUpdate):
+    """Use this method to edit animation, audio, document, photo, or video messages. If a message is a part of a message album, then it can be edited only to a photo or a video. Otherwise, message type can be changed arbitrarily. When inline message is edited, new file can't be uploaded. Use previously uploaded file via its file_id or specify a URL. On success, if the edited message was sent by the bot, the edited Message is returned, otherwise True is returned.
+
+    Parameters
+    ----------
+    chat_id : Integer or String, optional
+         Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer, optional
+         Required if inline_message_id is not specified. Identifier of the message to edit
+    inline_message_id : String, optional
+         Required if chat_id and message_id are not specified. Identifier of the inline message
+    media : InputMedia
+         A JSON-serialized object for a new media content of the message
+    reply_markup : InlineKeyboardMarkup, optional
+         A JSON-serialized object for a new inline keyboard.
+    """
+
+    def __init__(self, media, chat_id=None,
+                 message_id=None,
+                 inline_message_id=None,
+                 reply_markup: InlineKeyboardMarkup = None,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.inline_message_id = inline_message_id
+        self.media = media
+        self.reply_markup = reply_markup
+        self.message = message
+
+
+class editMessageReplyMarkup(MessageUpdate):
+    """Use this method to edit only the reply markup of messages. On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+
+    Parameters
+    ----------
+    chat_id : Integer or String, optional
+         Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer, optional
+         Required if inline_message_id is not specified. Identifier of the message to edit
+    inline_message_id : String, optional
+         Required if chat_id and message_id are not specified. Identifier of the inline message
+    reply_markup : InlineKeyboardMarkup, optional
+         A JSON-serialized object for an inline keyboard.
+    """
+
+    def __init__(self, chat_id=None,
+                 message_id=None,
+                 inline_message_id=None,
+                 reply_markup: InlineKeyboardMarkup = None,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.inline_message_id = inline_message_id
+        self.reply_markup = reply_markup
+        self.message = message
+
+
+class stopPoll(MessageUpdate):
+    """Use this method to stop a poll which was sent by the bot. On success, the stopped Poll with the final results is returned.
+
+    Parameters
+    ----------
+    chat_id : Integer or String
+         Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer
+         Identifier of the original message with the poll
+    reply_markup : InlineKeyboardMarkup, optional
+         A JSON-serialized object for a new message inline keyboard.
+    """
+
+    def __init__(self, chat_id,
+                 message_id,
+                 reply_markup: InlineKeyboardMarkup = None,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.reply_markup = reply_markup
+        self.message = message
+
+
+class deleteMessage(MessageUpdate):
+    """Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.Returns True on success.
+
+    Parameters
+    ----------
+    chat_id : Integer or String
+         Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    message_id : Integer
+         Identifier of the message to delete
+    """
+
+    def __init__(self, chat_id,
+                 message_id,
+                 message: Message = None):
+        super().__init__()
+        self.chat_id = chat_id
+        self.message_id = message_id
+        self.message = message
