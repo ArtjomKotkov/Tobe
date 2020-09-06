@@ -19,9 +19,10 @@ class BaseMethod(ABC):
     success_http_statuses = [200]
 
     @abstractmethod
-    def __init__(self, propagate_values=False):
+    def __init__(self, *, propagate_values=False, propagate_fields=None):
         self.method_name = self.__class__.__name__
         self.propagate_values = propagate_values
+        self.propagate_fields = propagate_fields
         self.token = None
 
     def set_token(self, token):

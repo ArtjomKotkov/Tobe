@@ -23,7 +23,7 @@ class Bot:
         return self
 
     @propagate_value(update_id='offset')
-    def execute(self, cmd, forced=False, propogate=False):
+    def execute(self, cmd, forced=False, propogate=False, propagate_fields=None):
         """Execution command(s).
 
         Parameters
@@ -33,6 +33,10 @@ class Bot:
             forced: bool
                 If forced=True, skip failed executions if commands were acquired as list of methods.
                 If forced=false, if get failed execution, stop send next commands.
+            progate_fields: dict
+                Fields which need to propogate into the bot (for saving it for next request).
+                User key=value syntax, where key - field from method, value - field to bot.
+                Supports inherit strictures, like - 'message.chat.id'.
         """
 
         result = None # Result of execution, iterable or type instance.
@@ -51,10 +55,10 @@ class Bot:
                         method = method.propagate_from_bot(self)
                     if forced:
                         response = method.execute()
-                        result.append(response)
+                        result.append((response, method.propagate_fields))
                     else:
                         response = method.execute()
-                        result.append(response)
+                        result.append((response, method.propagate_fields))
                         if response.status == False:
                             break
         else:
@@ -63,6 +67,6 @@ class Bot:
                 cmd = cmd.propagate_from_bot(self)
             elif cmd.propagate_values:
                 cmd = cmd.propagate_from_bot(self)
-            result = cmd.execute()
+            result = (cmd.execute(), cmd.propagate_fields)
         return result[0] if isinstance(result, Iterable) and len(result) == 1 else result
 
