@@ -12,11 +12,14 @@ from telegram.updates.methods import getUpdates
 tobe = Bot('--access token--')
 
 # Выполнение запросов.
-response = tobe.executed([getMe(), getUpdates()], forced=True)
+response = tobe.execute([getMe(), getUpdates()], forced=True)
 ```
 
 # Установка
 
- - None
+```shell script
+$ pipenv shell
+$ pip install -r requirements.txt   
+```
 
 
