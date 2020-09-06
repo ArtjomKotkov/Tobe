@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 import json
-from collections.abc import Iterable
+
 
 from ..services import fix_built_ins
+
 
 
 class BaseType(ABC):
