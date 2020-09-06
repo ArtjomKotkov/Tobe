@@ -30,9 +30,7 @@ def propagate_value(**values):
                 propogate_block(values, result, self)
 
             return [item[0] for item in result] if isinstance(result, list) else result[0]
-
         return second_wrapper
-
     return first_wrapper
 
 def propogate_block(values, response, self):

@@ -31,44 +31,6 @@ class InlineQuery(BaseType):
         self.offset = offset
 
 
-class answerInlineQuery(BaseType):
-    """Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are allowed.
-
-    Parameters
-    ----------
-    inline_query_id : String
-         Yes
-    results : Array of InlineQueryResult
-         Yes
-    cache_time : Integer
-         Optional
-    is_personal : Boolean
-         Optional
-    next_offset : String
-         Optional
-    switch_pm_text : String
-         Optional
-    switch_pm_parameter : String
-         Optional
-    """
-
-    def __init__(self, inline_query_id,
-                 results,
-                 cache_time,
-                 is_personal,
-                 next_offset,
-                 switch_pm_text,
-                 switch_pm_parameter):
-        super().__init__()
-        self.inline_query_id = inline_query_id
-        self.results = results
-        self.cache_time = cache_time
-        self.is_personal = is_personal
-        self.next_offset = next_offset
-        self.switch_pm_text = switch_pm_text
-        self.switch_pm_parameter = switch_pm_parameter
-
-
 class InlineQueryResultArticle(BaseType):
     """Represents a link to an article or web page.
 

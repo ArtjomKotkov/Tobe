@@ -22,6 +22,9 @@ class Bot:
             setattr(self, key, value)
         return self
 
+    def clear_cache(self):
+        self.propagated_values = {}
+
     @propagate_value(update_id='offset')
     def execute(self, cmd, forced=False, propogate=False, propagate_fields=None):
         """Execution command(s).

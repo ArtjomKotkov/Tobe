@@ -39,8 +39,9 @@ class sendMessage(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.text = text
         self.parse_mode = parse_mode
@@ -71,8 +72,9 @@ class forwardMessage(BaseMethod):
                  from_chat_id,
                  message_id,
                  disable_notification=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.from_chat_id = from_chat_id
         self.disable_notification = disable_notification
@@ -109,8 +111,9 @@ class sendPhoto(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.photo = photo
         self.caption = caption
@@ -162,8 +165,9 @@ class sendAudio(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.audio = audio
         self.caption = caption
@@ -210,8 +214,9 @@ class sendDocument(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.document = document
         self.thumb = thumb
@@ -265,8 +270,9 @@ class sendVideo(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.video = video
         self.duration = duration
@@ -321,8 +327,9 @@ class sendAnimation(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.animation = animation
         self.duration = duration
@@ -367,8 +374,9 @@ class sendVoice(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.voice = voice
         self.caption = caption
@@ -410,8 +418,9 @@ class sendVideoNote(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.video_note = video_note
         self.duration = duration
@@ -441,8 +450,9 @@ class sendMediaGroup(BaseMethod):
                  media,
                  disable_notification=None,
                  reply_to_message_id=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.media = media
         self.disable_notification = disable_notification
@@ -477,8 +487,9 @@ class sendLocation(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.latitude = latitude
         self.longitude = longitude
@@ -514,8 +525,9 @@ class editMessageLiveLocation(BaseMethod):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -543,8 +555,9 @@ class stopMessageLiveLocation(BaseMethod):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -588,8 +601,9 @@ class sendVenue(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.latitude = latitude
         self.longitude = longitude
@@ -633,8 +647,9 @@ class sendContact(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.phone_number = phone_number
         self.first_name = first_name
@@ -697,8 +712,9 @@ class sendPoll(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.question = question
         self.options = options
@@ -738,8 +754,9 @@ class sendDice(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.emoji = emoji
         self.disable_notification = disable_notification
@@ -760,8 +777,9 @@ class sendChatAction(BaseMethod):
 
     def __init__(self, chat_id,
                  action,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.action = action
 
@@ -782,8 +800,9 @@ class getUserProfilePhotos(BaseMethod):
     def __init__(self, user_id,
                  offset=None,
                  limit=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.user_id = user_id
         self.offset = offset
         self.limit = limit
@@ -799,8 +818,9 @@ class getFile(BaseMethod):
     """
 
     def __init__(self, file_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.file_id = file_id
 
 
@@ -820,8 +840,9 @@ class kickChatMember(BaseMethod):
     def __init__(self, chat_id,
                  user_id,
                  until_date=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
         self.until_date = until_date
@@ -840,8 +861,9 @@ class unbanChatMember(BaseMethod):
 
     def __init__(self, chat_id,
                  user_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
 
@@ -865,8 +887,9 @@ class restrictChatMember(BaseMethod):
                  user_id,
                  permissions,
                  until_date=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
         self.permissions = permissions
@@ -910,8 +933,9 @@ class promoteChatMember(BaseMethod):
                  can_restrict_members=None,
                  can_pin_messages=None,
                  can_promote_members=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
         self.can_change_info = can_change_info
@@ -940,8 +964,9 @@ class setChatAdministratorCustomTitle(BaseMethod):
     def __init__(self, chat_id,
                  user_id,
                  custom_title,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
         self.custom_title = custom_title
@@ -960,8 +985,9 @@ class setChatPermissions(BaseMethod):
 
     def __init__(self, chat_id,
                  permissions,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.permissions = permissions
 
@@ -976,8 +1002,9 @@ class exportChatInviteLink(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -994,8 +1021,9 @@ class setChatPhoto(BaseMethod):
 
     def __init__(self, chat_id,
                  photo,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.photo = photo
 
@@ -1010,8 +1038,9 @@ class deleteChatPhoto(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1028,8 +1057,9 @@ class setChatTitle(BaseMethod):
 
     def __init__(self, chat_id,
                  title,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.title = title
 
@@ -1047,8 +1077,9 @@ class setChatDescription(BaseMethod):
 
     def __init__(self, chat_id,
                  description=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.description = description
 
@@ -1069,8 +1100,9 @@ class pinChatMessage(BaseMethod):
     def __init__(self, chat_id,
                  message_id,
                  disable_notification=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.disable_notification = disable_notification
@@ -1086,8 +1118,9 @@ class unpinChatMessage(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1101,8 +1134,9 @@ class leaveChat(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1116,8 +1150,9 @@ class getChat(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1131,8 +1166,9 @@ class getChatAdministrators(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1146,8 +1182,9 @@ class getChatMembersCount(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1164,8 +1201,9 @@ class getChatMember(BaseMethod):
 
     def __init__(self, chat_id,
                  user_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.user_id = user_id
 
@@ -1183,8 +1221,9 @@ class setChatStickerSet(BaseMethod):
 
     def __init__(self, chat_id,
                  sticker_set_name,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.sticker_set_name = sticker_set_name
 
@@ -1199,8 +1238,9 @@ class deleteChatStickerSet(BaseMethod):
     """
 
     def __init__(self, chat_id,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
 
 
@@ -1226,8 +1266,9 @@ class answerCallbackQuery(BaseMethod):
                  show_alert=None,
                  url=None,
                  cache_time=None,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.callback_query_id = callback_query_id
         self.text = text
         self.show_alert = show_alert
@@ -1245,8 +1286,9 @@ class setMyCommands(BaseMethod):
     """
 
     def __init__(self, commands,
-                 propagate_values: bool = False):
-        super().__init__(propagate_values=propagate_values)
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.commands = commands
 
 
@@ -1287,8 +1329,10 @@ class editMessageText(MessageUpdate):
                  parse_mode=None,
                  disable_web_page_preview=None,
                  reply_markup: InlineKeyboardMarkup = None,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -1324,8 +1368,10 @@ class editMessageCaption(MessageUpdate):
                  caption=None,
                  parse_mode=None,
                  reply_markup: InlineKeyboardMarkup = None,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -1356,8 +1402,10 @@ class editMessageMedia(MessageUpdate):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup: InlineKeyboardMarkup = None,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -1385,8 +1433,10 @@ class editMessageReplyMarkup(MessageUpdate):
                  message_id=None,
                  inline_message_id=None,
                  reply_markup: InlineKeyboardMarkup = None,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.inline_message_id = inline_message_id
@@ -1410,8 +1460,10 @@ class stopPoll(MessageUpdate):
     def __init__(self, chat_id,
                  message_id,
                  reply_markup: InlineKeyboardMarkup = None,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.reply_markup = reply_markup
@@ -1431,8 +1483,10 @@ class deleteMessage(MessageUpdate):
 
     def __init__(self, chat_id,
                  message_id,
-                 message: Message = None):
-        super().__init__()
+                 message: Message = None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.message_id = message_id
         self.message = message

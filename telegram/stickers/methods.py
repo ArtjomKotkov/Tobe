@@ -18,12 +18,15 @@ class sendSticker(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
-    def __init__(self, chat_id,
+    def __init__(self,
+                 chat_id,
                  sticker,
                  disable_notification=None,
                  reply_to_message_id=None,
-                 reply_markup=None):
-        super().__init__()
+                 reply_markup=None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.chat_id = chat_id
         self.sticker = sticker
         self.disable_notification = disable_notification
@@ -40,8 +43,11 @@ class getStickerSet(BaseMethod):
          Name of the sticker set
     """
 
-    def __init__(self, name):
-        super().__init__()
+    def __init__(self,
+                 name,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.name = name
 
 
@@ -56,9 +62,12 @@ class uploadStickerFile(BaseMethod):
          PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. More info on Sending Files �
     """
 
-    def __init__(self, user_id,
-                 png_sticker):
-        super().__init__()
+    def __init__(self,
+                 user_id,
+                 png_sticker,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.user_id = user_id
         self.png_sticker = png_sticker
 
@@ -86,15 +95,18 @@ class createNewStickerSet(BaseMethod):
          A JSON-serialized object for position where the mask should be placed on faces
     """
 
-    def __init__(self, user_id,
+    def __init__(self,
+                 user_id,
                  name,
                  title,
                  emojis,
                  png_sticker=None,
                  tgs_sticker=None,
                  contains_masks=None,
-                 mask_position=None):
-        super().__init__()
+                 mask_position=None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.user_id = user_id
         self.name = name
         self.title = title
@@ -129,8 +141,10 @@ class addStickerToSet(BaseMethod):
                  emojis,
                  png_sticker=None,
                  tgs_sticker=None,
-                 mask_position=None):
-        super().__init__()
+                 mask_position=None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.user_id = user_id
         self.name = name
         self.png_sticker = png_sticker
@@ -150,9 +164,12 @@ class setStickerPositionInSet(BaseMethod):
          New sticker position in the set, zero-based
     """
 
-    def __init__(self, sticker,
-                 position):
-        super().__init__()
+    def __init__(self,
+                 sticker,
+                 position,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.sticker = sticker
         self.position = position
 
@@ -166,8 +183,11 @@ class deleteStickerFromSet(BaseMethod):
          File identifier of the sticker
     """
 
-    def __init__(self, sticker):
-        super().__init__()
+    def __init__(self,
+                 sticker,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.sticker = sticker
 
 
@@ -184,10 +204,13 @@ class setStickerSetThumb(BaseMethod):
          A PNG image with the thumbnail, must be up to 128 kilobytes in size and have width and height exactly 100px, or a TGS animation with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/animated_stickers#technical-requirements for animated sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More info on Sending Files �. Animated sticker set thumbnail can't be uploaded via HTTP URL.
     """
 
-    def __init__(self, name,
+    def __init__(self,
+                 name,
                  user_id,
-                 thumb=None):
-        super().__init__()
+                 thumb=None,
+                 propagate_values: bool = False,
+                 propagate_fields: dict = None):
+        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
         self.name = name
         self.user_id = user_id
         self.thumb = thumb
