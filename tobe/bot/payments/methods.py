@@ -77,9 +77,9 @@ class sendInvoice(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.chat_id = chat_id
         self.title = title
         self.description = description
@@ -124,9 +124,9 @@ class answerShippingQuery(BaseMethod):
                  ok,
                  shipping_options=None,
                  error_message=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.shipping_query_id = shipping_query_id
         self.ok = ok
         self.shipping_options = shipping_options
@@ -149,9 +149,9 @@ class answerPreCheckoutQuery(BaseMethod):
     def __init__(self, pre_checkout_query_id,
                  ok,
                  error_message=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.pre_checkout_query_id = pre_checkout_query_id
         self.ok = ok
         self.error_message = error_message

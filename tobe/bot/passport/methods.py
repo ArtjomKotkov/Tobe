@@ -14,8 +14,8 @@ class setPassportDataErrors(BaseMethod):
 
     def __init__(self, user_id,
                  errors,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.errors = errors

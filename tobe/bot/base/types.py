@@ -1,4 +1,6 @@
 from ..types import BaseType
+from ..exceptions import FileSizeError
+from ..settings import MAX_FILE_SIZE, MAX_IMG_SIZE, MAX_FILE_SIZE_BYURL, MAX_IMG_SIZE_BYURL
 
 
 class User(BaseType):
@@ -833,6 +835,7 @@ class File(BaseType):
         self.file_path = file_path
 
 
+
 class ReplyKeyboardMarkup(BaseType):
     """This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 
@@ -1238,6 +1241,34 @@ class Parameters(BaseType):
                  retry_after=None):
         self.migrate_to_chat_id = migrate_to_chat_id
         self.retry_after = retry_after
+
+
+class InputFile:
+
+    def __init__(self, file_path, is_image, filename=None, attach=None):
+        self.is_image = is_image
+        self.file_path = self._load_file(file_path)
+        self.filename = filename
+        self.attach = attach
+
+    def _load_file(self, file_path):
+        try:
+            file = open(file_path)
+        except FileNotFoundError:
+            return None
+        self.filename = file.name
+        self._validate_file(file)
+        file.close()
+        return file
+
+    def _validate_file(self, file):
+        self._validate_file_size(file)
+
+    def _validate_file_size(self, file):
+        file.seek(0, 0)
+        file_size = file.tell()
+        if not self.is_image and file_size > MAX_FILE_SIZE or self.is_image and file_size > MAX_IMG_SIZE:
+            raise FileSizeError(f'Invalid file size.')
 
 
 class InputMediaPhoto(BaseType):

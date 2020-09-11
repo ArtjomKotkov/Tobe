@@ -1,4 +1,6 @@
 from ..methods import BaseMethod
+from ..base import Messsage, File
+from .types import StickerSet
 
 
 class sendSticker(BaseMethod):
@@ -18,15 +20,17 @@ class sendSticker(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
+    response_type = Messsage
+
     def __init__(self,
                  chat_id,
                  sticker,
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.chat_id = chat_id
         self.sticker = sticker
         self.disable_notification = disable_notification
@@ -43,11 +47,13 @@ class getStickerSet(BaseMethod):
          Name of the sticker set
     """
 
+    response_type = StickerSet
+
     def __init__(self,
                  name,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.name = name
 
 
@@ -62,12 +68,14 @@ class uploadStickerFile(BaseMethod):
          PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. More info on Sending Files �
     """
 
+    response_type = File
+
     def __init__(self,
                  user_id,
                  png_sticker,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.png_sticker = png_sticker
 
@@ -95,6 +103,8 @@ class createNewStickerSet(BaseMethod):
          A JSON-serialized object for position where the mask should be placed on faces
     """
 
+    # response_type = Bool
+
     def __init__(self,
                  user_id,
                  name,
@@ -104,9 +114,9 @@ class createNewStickerSet(BaseMethod):
                  tgs_sticker=None,
                  contains_masks=None,
                  mask_position=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.name = name
         self.title = title
@@ -136,15 +146,17 @@ class addStickerToSet(BaseMethod):
          A JSON-serialized object for position where the mask should be placed on faces
     """
 
+    # response_type = Bool
+
     def __init__(self, user_id,
                  name,
                  emojis,
                  png_sticker=None,
                  tgs_sticker=None,
                  mask_position=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.name = name
         self.png_sticker = png_sticker
@@ -164,12 +176,14 @@ class setStickerPositionInSet(BaseMethod):
          New sticker position in the set, zero-based
     """
 
+    # response_type = Bool
+
     def __init__(self,
                  sticker,
                  position,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.sticker = sticker
         self.position = position
 
@@ -183,11 +197,13 @@ class deleteStickerFromSet(BaseMethod):
          File identifier of the sticker
     """
 
+    # response_type = Bool
+
     def __init__(self,
                  sticker,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.sticker = sticker
 
 
@@ -208,9 +224,9 @@ class setStickerSetThumb(BaseMethod):
                  name,
                  user_id,
                  thumb=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.name = name
         self.user_id = user_id
         self.thumb = thumb

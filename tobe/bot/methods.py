@@ -19,11 +19,16 @@ class BaseMethod(ABC):
     success_http_statuses = [200]
 
     @abstractmethod
-    def __init__(self, *, propagate_values=False, propagate_fields=None):
+    def __init__(self, *, propagate_values=False, propagate_fields=None, headers=None):
         self.method_name = self.__class__.__name__
         self.propagate_values = propagate_values
         self.propagate_fields = propagate_fields
         self.token = None
+        try:
+            self.headers = {}.update(headers)
+        except TypeError:
+            self.headers = {}
+
 
     def set_token(self, token):
         self.token = token
@@ -70,7 +75,7 @@ class BaseMethod(ABC):
 
         headers = {
             'content-type': self.content_type
-        }
+        }.update(self.headers)
 
         http = httplib2.Http()
         resp, content = http.request(self.get_method_url(), method=self.http_method, body=self.get_method_body(),
@@ -88,10 +93,5 @@ class BaseMethod(ABC):
             self.response_type = self.response_type[0]
             return [self.response_type(**fix_built_ins(result)) for result in response['result']]
         else:
-            return self.response_type(**fix_built_ins(response['result'])) if not response_type else response_type(**response)
-
-
-
-
-
-
+            return self.response_type(**fix_built_ins(response['result'])) if not response_type else response_type(
+                **response)
