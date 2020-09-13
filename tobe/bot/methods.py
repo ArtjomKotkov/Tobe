@@ -72,7 +72,7 @@ class BaseMethod(ABC):
         for key in blank_keys:
             data.pop(key)
         if self.http_method == 'GET':
-            return json.dumps(data)
+            return data
         elif self.http_method == 'POST':
             return data
 
@@ -85,10 +85,9 @@ class BaseMethod(ABC):
         }.update(self.headers)
 
         if self.http_method == 'GET':
-            resp = requests.post(url=self.get_method_url(), data=self.get_method_body(),
+            resp = requests.get(url=self.get_method_url(), params=self.get_method_body(),
                                 headers=headers)
 
-            print(resp.request.body)
         elif self.http_method == 'POST':
             data, files = self.get_method_body()
             resp = requests.post(url=self.get_method_url(), data=data, files=files, headers=headers)
