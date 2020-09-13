@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 import json
-from urllib.parse import urlencode
 from collections.abc import Iterable
 
+import requests
 import httplib2
 
 from .types import BaseType, Error
 from .services import fix_built_ins
+from .base.types import InputFile
 
 
 class BaseMethod(ABC):
@@ -29,7 +30,6 @@ class BaseMethod(ABC):
         except TypeError:
             self.headers = {}
 
-
     def set_token(self, token):
         self.token = token
         return self
@@ -47,8 +47,15 @@ class BaseMethod(ABC):
                 pass
         return self
 
+    def propagate_from_dict(self, dict: dict):
+
+        for key, value in dict.values():
+            setattr(self, key, value)
+        return self
+
     def get_method_url(self):
         """Generate url for calling method api."""
+        print(self.request_url, self.token, self.method_name)
         return self.request_url + self.token + '/' + self.method_name
 
     def get_method_body(self):
@@ -66,8 +73,8 @@ class BaseMethod(ABC):
             data.pop(key)
         if self.http_method == 'GET':
             return json.dumps(data)
-        else:
-            return urlencode(data)
+        elif self.http_method == 'POST':
+            return data
 
     def execute(self):
         """Send method request."""
@@ -77,17 +84,22 @@ class BaseMethod(ABC):
             'content-type': self.content_type
         }.update(self.headers)
 
-        http = httplib2.Http()
-        resp, content = http.request(self.get_method_url(), method=self.http_method, body=self.get_method_body(),
-                                     headers=headers)
-        if int(resp['status']) not in self.success_http_statuses:
-            return self.parse_response(content, Error)
-        return self.parse_response(content)
+        if self.http_method == 'GET':
+            resp = requests.post(url=self.get_method_url(), data=self.get_method_body(),
+                                headers=headers)
+
+            print(resp.request.body)
+        elif self.http_method == 'POST':
+            data, files = self.get_method_body()
+            resp = requests.post(url=self.get_method_url(), data=data, files=files, headers=headers)
+
+        if int(resp.status_code) not in self.success_http_statuses:
+            return self.parse_response(resp.json(), Error)
+        return self.parse_response(resp.json())
 
     def parse_response(self, response, response_type=None):
         # Parse response and return once of available response types.
 
-        response = json.loads(response)
         if isinstance(self.response_type, Iterable) and not response_type:
             # If response type have a kind [response_type,] for multiple responses.
             self.response_type = self.response_type[0]
@@ -95,3 +107,19 @@ class BaseMethod(ABC):
         else:
             return self.response_type(**fix_built_ins(response['result'])) if not response_type else response_type(
                 **response)
+
+
+class FileMethod:
+    file_class = None
+    file_response_class = None
+
+    def load_file(self, file_or_str):
+        if isinstance(file_or_str, InputFile):
+            return file_or_str.file
+        elif isinstance(file_or_str, self.file_class):
+            return file_or_str.media
+        elif isinstance(file_or_str, self.file_response_class):
+            return file_or_str.file_id
+        else:
+            raise TypeError(
+                f'Only InputFile, {self.file_class.__name__}, {self.file_response_class.__name__} are available.')

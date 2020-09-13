@@ -288,7 +288,7 @@ class Message(BaseType):
         self.audio = Audio.parse(audio)
         self.document = Document.parse(document)
         self.photo = PhotoSize.parse(photo, iterable=True)
-        self.sticker = sticker # <-Sticker
+        self.sticker = sticker  # <-Sticker
         self.video = Video.parse(video)
         self.video_note = MessageEntity.parse(video_note, iterable=True)
         self.voice = voice
@@ -296,7 +296,7 @@ class Message(BaseType):
         self.caption_entities = caption_entities
         self.contact = Contact.parse(contact)
         self.dice = Dice.parse(dice)
-        self.game = game # <-Game
+        self.game = game  # <-Game
         self.poll = Poll.parse(poll)
         self.venue = Venue.parse(venue)
         self.location = Location.parse(location)
@@ -311,10 +311,10 @@ class Message(BaseType):
         self.migrate_to_chat_id = migrate_to_chat_id
         self.migrate_from_chat_id = migrate_from_chat_id
         self.pinned_message = Message.parse(pinned_message)
-        self.invoice = invoice # <- Invoice
-        self.successful_payment = successful_payment # <- successful_payment
+        self.invoice = invoice  # <- Invoice
+        self.successful_payment = successful_payment  # <- successful_payment
         self.connected_website = connected_website
-        self.passport_data = passport_data # <- passport_data
+        self.passport_data = passport_data  # <- passport_data
         self.reply_markup = InlineKeyboardMarkup.parse(reply_markup)
 
 
@@ -835,7 +835,6 @@ class File(BaseType):
         self.file_path = file_path
 
 
-
 class ReplyKeyboardMarkup(BaseType):
     """This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 
@@ -975,7 +974,7 @@ class InlineKeyboardButton(BaseType):
         self.callback_data = callback_data
         self.switch_inline_query = switch_inline_query
         self.switch_inline_query_current_chat = switch_inline_query_current_chat
-        self.callback_game = callback_game # <- callback_game
+        self.callback_game = callback_game  # <- callback_game
         self.pay = pay
 
 
@@ -1245,20 +1244,19 @@ class Parameters(BaseType):
 
 class InputFile:
 
-    def __init__(self, file_path, is_image, filename=None, attach=None):
+    def __init__(self, file, is_image=None):
         self.is_image = is_image
-        self.file_path = self._load_file(file_path)
-        self.filename = filename
-        self.attach = attach
+        self.file = self._load_file(file)
 
     def _load_file(self, file_path):
         try:
             file = open(file_path)
+            assert self.is_image is not None, 'If you provide file as io.IOBase you must, is_image also must be specified.'
         except FileNotFoundError:
-            return None
+            assert isinstance(file_path, str), 'File must be io.IOBase or string.'
+            return file_path
         self.filename = file.name
         self._validate_file(file)
-        file.close()
         return file
 
     def _validate_file(self, file):
@@ -1286,11 +1284,11 @@ class InputMediaPhoto(BaseType):
          Mode for parsing entities in the photo caption. See formatting options for more details.
     """
 
-    def __init__(self, type,
-                 media,
+    def __init__(self,
+                 media: str,
                  caption=None,
                  parse_mode=None):
-        self.type = type # <- input file or str
+        self.type = 'photo'  # <- input file or str
         self.media = media
         self.caption = caption
         self.parse_mode = parse_mode
@@ -1321,8 +1319,8 @@ class InputMediaVideo(BaseType):
          Pass True, if the uploaded video is suitable for streaming
     """
 
-    def __init__(self, type,
-                 media,
+    def __init__(self,
+                 media: str,
                  thumb=None,
                  caption=None,
                  parse_mode=None,
@@ -1330,9 +1328,9 @@ class InputMediaVideo(BaseType):
                  height=None,
                  duration=None,
                  supports_streaming=None):
-        self.type = type
+        self.type = 'video'
         self.media = media
-        self.thumb = thumb # <- input file or str
+        self.thumb = thumb  # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.width = width
@@ -1364,17 +1362,17 @@ class InputMediaAnimation(BaseType):
          Animation duration
     """
 
-    def __init__(self, type,
-                 media,
+    def __init__(self,
+                 media: str,
                  thumb=None,
                  caption=None,
                  parse_mode=None,
                  width=None,
                  height=None,
                  duration=None):
-        self.type = type
+        self.type = 'animation'
         self.media = media
-        self.thumb = thumb # <- input file or str
+        self.thumb = thumb  # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.width = width
@@ -1405,17 +1403,17 @@ class InputMediaAudio(BaseType):
          Title of the audio
     """
 
-    def __init__(self, type,
-                 media,
+    def __init__(self,
+                 media: str,
                  thumb=None,
                  caption=None,
                  parse_mode=None,
                  duration=None,
                  performer=None,
                  title=None):
-        self.type = type
+        self.type = 'audio'
         self.media = media
-        self.thumb = thumb # <- input file or str
+        self.thumb = thumb  # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
         self.duration = duration
@@ -1440,13 +1438,22 @@ class InputMediaDocument(BaseType):
          Mode for parsing entities in the document caption. See formatting options for more details.
     """
 
-    def __init__(self, type,
-                 media,
+    def __init__(self,
+                 media: str,
                  thumb=None,
                  caption=None,
                  parse_mode=None):
-        self.type = type
+        self.type = 'document'
         self.media = media
-        self.thumb = thumb # <- input file or str
+        self.thumb = thumb  # <- input file or str
         self.caption = caption
         self.parse_mode = parse_mode
+
+
+class InputMediaGroup(BaseType):
+
+    def __init__(self, *args):
+        self.data = []
+        for arg in args:
+            if isinstance(arg, InputMediaPhoto) or isinstance(arg, InputMediaVideo):
+                self.data.append(arg)

@@ -1,5 +1,7 @@
-from ..methods import BaseMethod
-from .types import User, Message, InlineKeyboardMarkup
+from ..methods import BaseMethod, FileMethod
+from .types import User, Message, InlineKeyboardMarkup, InputFile, PhotoSize, Animation, Audio, Document, Video, \
+    VideoNote, Voice, InputMediaPhoto, InputMediaVideo, InputMediaAnimation, InputMediaAudio, InputMediaDocument, \
+    InputMediaGroup
 
 
 class getMe(BaseMethod):
@@ -81,7 +83,7 @@ class forwardMessage(BaseMethod):
         self.message_id = message_id
 
 
-class sendPhoto(BaseMethod):
+class sendPhoto(BaseMethod, FileMethod):
     """Use this method to send photos. On success, the sent Message is returned.
 
     Parameters
@@ -103,6 +105,9 @@ class sendPhoto(BaseMethod):
     """
 
     response_type = Message
+    file_response_class = PhotoSize
+    file_class = InputMediaPhoto
+    http_method = 'POST'
 
     def __init__(self, chat_id,
                  photo,
@@ -115,15 +120,25 @@ class sendPhoto(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.photo = photo
+        self.photo = self.load_file(photo)
         self.caption = caption
         self.parse_mode = parse_mode
         self.disable_notification = disable_notification
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('photo'), str):
+            return data, None
+        try:
+            file = data.pop('photo')
+        except KeyError:
+            file = None
+        return data, dict(photo=file)
 
-class sendAudio(BaseMethod):
+
+class sendAudio(BaseMethod, FileMethod):
     """For sending voice messages, use the sendVoice method instead.
 
     Parameters
@@ -153,6 +168,9 @@ class sendAudio(BaseMethod):
     """
 
     response_type = Message
+    file_response_class = Audio
+    file_class = InputMediaAudio
+    http_method = 'POST'
 
     def __init__(self, chat_id,
                  audio,
@@ -169,7 +187,7 @@ class sendAudio(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.audio = audio
+        self.audio = self.load_file(audio)
         self.caption = caption
         self.parse_mode = parse_mode
         self.duration = duration
@@ -180,8 +198,18 @@ class sendAudio(BaseMethod):
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('audio'), str):
+            return data, None
+        try:
+            file = data.pop('audio')
+        except KeyError:
+            file = None
+        return data, dict(audio=file)
 
-class sendDocument(BaseMethod):
+
+class sendDocument(BaseMethod, FileMethod):
     """Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
 
     Parameters
@@ -205,6 +233,9 @@ class sendDocument(BaseMethod):
     """
 
     response_type = Message
+    file_response_class = Document
+    file_class = InputMediaDocument
+    http_method = 'POST'
 
     def __init__(self, chat_id,
                  document,
@@ -218,7 +249,7 @@ class sendDocument(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.document = document
+        self.document = self.load_file(document)
         self.thumb = thumb
         self.caption = caption
         self.parse_mode = parse_mode
@@ -226,8 +257,18 @@ class sendDocument(BaseMethod):
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('document'), str):
+            return data, None
+        try:
+            file = data.pop('document')
+        except KeyError:
+            file = None
+        return data, dict(document=file)
 
-class sendVideo(BaseMethod):
+
+class sendVideo(BaseMethod, FileMethod):
     """Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
 
     Parameters
@@ -258,6 +299,11 @@ class sendVideo(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
+    file_response_class = Video
+    file_class = InputMediaVideo
+    response_type = Message
+    http_method = 'POST'
+
     def __init__(self, chat_id,
                  video,
                  duration=None,
@@ -274,7 +320,7 @@ class sendVideo(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.video = video
+        self.video = self.load_file(video)
         self.duration = duration
         self.width = width
         self.height = height
@@ -286,8 +332,18 @@ class sendVideo(BaseMethod):
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('video'), str):
+            return data, None
+        try:
+            file = data.pop('video')
+        except KeyError:
+            file = None
+        return data, dict(video=file)
 
-class sendAnimation(BaseMethod):
+
+class sendAnimation(BaseMethod, FileMethod):
     """Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
 
     Parameters
@@ -316,6 +372,11 @@ class sendAnimation(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
+    file_response_class = Animation
+    file_class = InputMediaAnimation
+    response_type = Message
+    http_method = 'POST'
+
     def __init__(self, chat_id,
                  animation,
                  duration=None,
@@ -331,7 +392,7 @@ class sendAnimation(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.animation = animation
+        self.animation = self.load_file(animation)
         self.duration = duration
         self.width = width
         self.height = height
@@ -342,8 +403,18 @@ class sendAnimation(BaseMethod):
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('animation'), str):
+            return data, None
+        try:
+            file = data.pop('animation')
+        except KeyError:
+            file = None
+        return data, dict(animation=file)
 
-class sendVoice(BaseMethod):
+
+class sendVoice(BaseMethod, FileMethod):
     """Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
 
     Parameters
@@ -366,6 +437,10 @@ class sendVoice(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
+    response_type = Message
+    file_response_class = Voice
+    http_method = 'POST'
+
     def __init__(self, chat_id,
                  voice,
                  caption=None,
@@ -378,7 +453,7 @@ class sendVoice(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.voice = voice
+        self.voice = self.load_file(voice)
         self.caption = caption
         self.parse_mode = parse_mode
         self.duration = duration
@@ -386,8 +461,18 @@ class sendVoice(BaseMethod):
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
 
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('voice'), str):
+            return data, None
+        try:
+            file = data.pop('voice')
+        except KeyError:
+            file = None
+        return data, dict(voice=file)
 
-class sendVideoNote(BaseMethod):
+
+class sendVideoNote(BaseMethod, FileMethod):
     """As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
 
     Parameters
@@ -410,6 +495,10 @@ class sendVideoNote(BaseMethod):
          Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
     """
 
+    response_type = Message
+    file_response_class = VideoNote
+    http_method = 'POST'
+
     def __init__(self, chat_id,
                  video_note,
                  duration=None,
@@ -422,13 +511,23 @@ class sendVideoNote(BaseMethod):
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.chat_id = chat_id
-        self.video_note = video_note
+        self.video_note = self.load_file(video_note)
         self.duration = duration
         self.length = length
         self.thumb = thumb
         self.disable_notification = disable_notification
         self.reply_to_message_id = reply_to_message_id
         self.reply_markup = reply_markup
+
+    def get_method_body(self):
+        data = super().get_method_body()
+        if isinstance(data.get('video_note'), str):
+            return data, None
+        try:
+            file = data.pop('video_note')
+        except KeyError:
+            file = None
+        return data, dict(video_note=file)
 
 
 class sendMediaGroup(BaseMethod):
@@ -446,8 +545,10 @@ class sendMediaGroup(BaseMethod):
          If the messages are a reply, ID of the original message
     """
 
+    response_type = [Message]
+
     def __init__(self, chat_id,
-                 media,
+                 media: InputMediaGroup,
                  disable_notification=None,
                  reply_to_message_id=None,
                  *args,
