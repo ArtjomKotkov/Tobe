@@ -25,9 +25,9 @@ class getUpdates(BaseMethod):
                  limit: int = None,
                  timeout: int = None,
                  allowed_updates=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.offset = offset
         self.limit = limit
         self.timeout = timeout
@@ -54,9 +54,9 @@ class setWebhook(BaseMethod):
                  certificate: IOBase = None,
                  max_connections: int = None,
                  allowed_updates=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.url = url
         self.certificate = certificate
         self.max_connections = max_connections
@@ -69,9 +69,9 @@ class deleteWebhook(BaseMethod):
     """
 
     def __init__(self,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class getWebhookInfo(BaseMethod):
@@ -81,6 +81,6 @@ class getWebhookInfo(BaseMethod):
     response_type = WebhookInfo
 
     def __init__(self,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)

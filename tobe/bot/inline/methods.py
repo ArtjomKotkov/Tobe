@@ -29,9 +29,9 @@ class answerInlineQuery(BaseMethod):
                  next_offset=None,
                  switch_pm_text=None,
                  switch_pm_parameter=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.inline_query_id = inline_query_id
         self.results = results
         self.cache_time = cache_time

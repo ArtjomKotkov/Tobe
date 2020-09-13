@@ -23,9 +23,9 @@ class sendGame(BaseMethod):
                  disable_notification=None,
                  reply_to_message_id=None,
                  reply_markup=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.chat_id = chat_id
         self.game_short_name = game_short_name
         self.disable_notification = disable_notification
@@ -61,9 +61,9 @@ class setGameScore(BaseMethod):
                  chat_id=None,
                  message_id=None,
                  inline_message_id=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.score = score
         self.force = force
@@ -92,9 +92,9 @@ class getGameHighScores(BaseMethod):
                  chat_id=None,
                  message_id=None,
                  inline_message_id=None,
-                 propagate_values: bool = False,
-                 propagate_fields: dict = None):
-        super().__init__(propagate_values=propagate_values, propagate_fields=propagate_fields)
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.user_id = user_id
         self.chat_id = chat_id
         self.message_id = message_id
